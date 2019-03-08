@@ -1,0 +1,968 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**[Write your name in this box.]**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Resources for completing this homework:  \n",
+    "https://en.wikipedia.org/wiki/List_of_S%26P_400_companies  \n",
+    "https://pandas.pydata.org/pandas-docs/stable/10min.html  \n",
+    "https://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_html.html  \n",
+    "https://pandas.pydata.org/pandas-docs/stable/io.html#io-read-html  \n",
+    "https://pydata.github.io/pandas-datareader/stable/index.html  \n",
+    "https://docs.python.org/3/library/datetime.html#datetime-objects  \n",
+    "https://pandas.pydata.org/pandas-docs/stable/advanced.html  "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "INSTRUCTIONS:    \n",
+    "In the cells below, replace the comments with your code.  If you need to add new cells, do at the bottom of the workbook rather than in the middle, because I will be automatically loading everyone's answers, and I'll need everyone's code in the same cells."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In this cell, import the pandas library and alias to \"pd\".\n",
+    "# The pandas library manipulates tables and time series,\n",
+    "# and was written specifically with financial applications in mind.\n",
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Consider the url link given above to a page that contains the components of the S&P MidCap 400 index.\n",
+    "# In this cell, use pandas read_html() function to read html tables into a list of pandas DataFrames.\n",
+    "# A \"DataFrame\" is the basic data structure in pandas.  It is a table which allows SQL-like queries.\n",
+    "# Depending on the particualar html table, you may or may not need to include the parameter header=0.\n",
+    "# Assign the output to a variable called list_of_DataFrames.\n",
+    "list_of_DataFrames = pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_400_companies', header=0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "2\n",
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "401\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Execute this cell.\n",
+    "print(len(list_of_DataFrames))  # How many tables are there?\n",
+    "df = list_of_DataFrames[0]      # We care about the first table.\n",
+    "print(type(df))                 # What type is df?\n",
+    "print(len(df))                  # How many rows in df?"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Security</th>\n",
+       "      <th>Ticker symbol</th>\n",
+       "      <th>GICS Sector</th>\n",
+       "      <th>GICS Sub Industry</th>\n",
+       "      <th>SEC filings</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Aaron's Inc.</td>\n",
+       "      <td>AAN</td>\n",
+       "      <td>Consumer Discretionary</td>\n",
+       "      <td>Homefurnishing Retail</td>\n",
+       "      <td>reports</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>Acadia Healthcare</td>\n",
+       "      <td>ACHC</td>\n",
+       "      <td>Health Care</td>\n",
+       "      <td>Health Care Facilities</td>\n",
+       "      <td>reports</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>ACI Worldwide</td>\n",
+       "      <td>ACIW</td>\n",
+       "      <td>Information Technology</td>\n",
+       "      <td>Application Software</td>\n",
+       "      <td>reports</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "            Security Ticker symbol             GICS Sector  \\\n",
+       "0       Aaron's Inc.           AAN  Consumer Discretionary   \n",
+       "1  Acadia Healthcare          ACHC             Health Care   \n",
+       "2      ACI Worldwide          ACIW  Information Technology   \n",
+       "\n",
+       "        GICS Sub Industry SEC filings  \n",
+       "0   Homefurnishing Retail     reports  \n",
+       "1  Health Care Facilities     reports  \n",
+       "2    Application Software     reports  "
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# In this cell, execute code to display the first three rows of the table.\n",
+    "df[:3]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Security</th>\n",
+       "      <th>Ticker symbol</th>\n",
+       "      <th>GICS Sector</th>\n",
+       "      <th>GICS Sub Industry</th>\n",
+       "      <th>SEC filings</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>398</th>\n",
+       "      <td>United States Steel Corporation</td>\n",
+       "      <td>X</td>\n",
+       "      <td>Materials</td>\n",
+       "      <td>Steel</td>\n",
+       "      <td>reports</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>399</th>\n",
+       "      <td>Alleghany Corporation</td>\n",
+       "      <td>Y</td>\n",
+       "      <td>Financials</td>\n",
+       "      <td>Reinsurance</td>\n",
+       "      <td>reports</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>400</th>\n",
+       "      <td>Zebra Technologies Corp</td>\n",
+       "      <td>ZBRA</td>\n",
+       "      <td>Information Technology</td>\n",
+       "      <td>Office Electronics</td>\n",
+       "      <td>reports</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                            Security Ticker symbol             GICS Sector  \\\n",
+       "398  United States Steel Corporation             X               Materials   \n",
+       "399            Alleghany Corporation             Y              Financials   \n",
+       "400          Zebra Technologies Corp          ZBRA  Information Technology   \n",
+       "\n",
+       "      GICS Sub Industry SEC filings  \n",
+       "398               Steel     reports  \n",
+       "399         Reinsurance     reports  \n",
+       "400  Office Electronics     reports  "
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# In this cell, execute code to display the last three rows of the table.\n",
+    "df[-3:]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In this cell, select the ticker column and convert it to a list called tickerList.\n",
+    "tickerList = list(df['Ticker symbol'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "401\n",
+      "['AAN', 'ACHC', 'ACIW', 'ADNT', 'ATGE', 'ACM', 'ACC', 'AEO', 'AFG', 'AGCO', 'AHL', 'AKRX', 'ALE', 'ALEX', 'APY', 'ATI', 'AMCX', 'AN', 'ARW', 'ARRS', 'ASB', 'ASGN', 'ASH', 'ATO', 'ATR', 'AVNS', 'AVT', 'AYI', 'BBBY', 'BC', 'BCO', 'BDC', 'BID', 'BIG', 'BIO', 'BKH', 'BLKB', 'BMS', 'BOH', 'BRO', 'BXS', 'BYD', 'CABO', 'CAKE', 'CAR', 'CARS', 'CASY', 'CATY', 'CBSH', 'CBT', 'CC', 'CDK', 'CFR', 'CGNX', 'CHE', 'CHDN', 'CHFC', 'CHK', 'CIEN', 'CLB', 'CLGX', 'CLH', 'CLI', 'CMC', 'CMD', 'CMP', 'CNK', 'CNO', 'COHR', 'CONE', 'COR', 'CPE', 'CPT', 'CR', 'CREE', 'CRI', 'CRL', 'CRS', 'CRUS', 'CNX', 'CSL', 'CTLT', 'CUZ', 'CVLT', 'CXW', 'CW', 'CBRL', 'CY', 'DAN', 'DCI', 'DDS', 'DECK', 'DEI', 'DKS', 'DLPH', 'DLX', 'DNB', 'DNKN', 'DNOW', 'DO', 'DPZ', 'DRQ', 'DY', 'EAT', 'EGN', 'EHC', 'EME', 'ENR', 'ENS', 'EPC', 'EPR', 'ERI', 'ESL', 'ESV', 'EV', 'EVR', 'EWBC', 'EXEL', 'EXP', 'FAF', 'FDS', 'FHN', 'FICO', 'FII', 'FIVE', 'FLO', 'FR', 'FNB', 'FSLR', 'FULT', 'GATX', 'GEF', 'GEO', 'GGG', 'GHC', 'GME', 'GMED', 'GNTX', 'GNW', 'GPOR', 'GVA', 'GWR', 'HAE', 'HAIN', 'HWC', 'HCSG', 'HE', 'HELE', 'HIW', 'HNI', 'HOMB', 'HPT', 'HQY', 'HR', 'HRC', 'HUBB', 'ICUI', 'IDA', 'IART', 'IBKR', 'IBOC', 'IDCC', 'IDTI', 'IEX', 'INGR', 'INT', 'ISCA', 'ITT', 'JACK', 'JBGS', 'JBL', 'JHG', 'JBLU', 'JCOM', 'JKHY', 'JLL', 'JW.A', 'KBH', 'KBR', 'KEX', 'KMPR', 'KMT', 'KNX', 'KRC', 'LAMR', 'LANC', 'LHO', 'LDOS', 'LGND', 'LECO', 'LFUS', 'LII', 'LITE', 'LIVN', 'RAMP', 'LM', 'LOGM', 'LPNT', 'LPT', 'LPX', 'LSI', 'LSTR', 'LW', 'LYV', 'MAN', 'MANH', 'MASI', 'MBFI', 'MCY', 'MD', 'MDP', 'MDR', 'MDRX', 'MDSO', 'MDU', 'MIK', 'MKSI', 'MKTX', 'MLHR', 'MMS', 'MNK', 'MOH', 'MPW', 'MPWR', 'MSA', 'MSM', 'MTDR', 'MTX', 'MTZ', 'MUR', 'MUSA', 'NATI', 'NAVI', 'NBR', 'NCR', 'NDSN', 'NEU', 'NFG', 'NJR', 'NNN', 'NTCT', 'NUS', 'NUVA', 'NVR', 'NVT', 'NWE', 'NYCB', 'NYT', 'OAS', 'ODFL', 'ODP', 'OFC', 'OGE', 'OGS', 'OHI', 'OII', 'OLLI', 'OLN', 'OI', 'ORI', 'OSK', 'OZK', 'PACW', 'PBF', 'PB', 'PBH', 'PBI', 'PCH', 'PDCO', 'PENN', 'PII', 'PLT', 'PNFP', 'PNM', 'POL', 'POOL', 'POST', 'PRAH', 'PRI', 'PTC', 'PTEN', 'PZZA', 'QEP', 'R', 'RBC', 'RDC', 'RGA', 'RGLD', 'RIG', 'RLGY', 'RNR', 'ROL', 'RPM', 'RRC', 'RS', 'RYN', 'SABR', 'SAFM', 'SAIC', 'SAM', 'SBH', 'SBNY', 'SBRA', 'SCI', 'SEIC', 'SF', 'SFM', 'SGMS', 'SIG', 'SIX', 'SKT', 'SKX', 'SLAB', 'SLGN', 'SLM', 'SM', 'SMG', 'SNH', 'SNV', 'SNX', 'SON', 'SPN', 'STE', 'STL', 'STLD', 'SWN', 'SWX', 'SXT', 'SYNA', 'SYNH', 'TCF', 'TCBI', 'TCO', 'TDC', 'TDS', 'TDY', 'TECD', 'TECH', 'TER', 'TEX', 'TFX', 'TGNA', 'THC', 'THG', 'THO', 'THS', 'TKR', 'TOL', 'TPH', 'TPX', 'TR', 'TREE', 'TRMB', 'TRMK', 'TRN', 'TTC', 'TUP', 'TXRH', 'TYL', 'UBSI', 'UE', 'UFS', 'UGI', 'ULTI', 'UMBF', 'UMPQ', 'UNFI', 'UTHR', 'UNIT', 'URBN', 'VAC', 'VC', 'VLY', 'VMI', 'VVV', 'VVC', 'VSM', 'VSAT', 'VSH', 'WRB', 'WAB', 'WAFD', 'WBS', 'WEN', 'WERN', 'WEX', 'WOR', 'WPX', 'WRI', 'WSM', 'WSO', 'WST', 'WTFC', 'WTR', 'WTW', 'WWD', 'WWE', 'WYND', 'X', 'Y', 'ZBRA']\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Execute this cell.\n",
+    "print(len(tickerList))\n",
+    "print(tickerList)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In this cell, select the GICS sector column and convert it to a set called sectorSet.\n",
+    "sectorSet = set(df['GICS Sector'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "12\n",
+      "{'Industrials', 'Energy', 'Information Technology', 'Real Estate', 'Utilities', 'Materials', 'Consumer Staples', 'Health Care', 'Healthcare', 'Financials', 'Consumer Discretionary', 'Communication Services'}\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Execute this cell.  Do you understand the difference between sets and lists?\n",
+    "print(len(sectorSet))\n",
+    "print(sectorSet)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'numpy.ndarray'>\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "(401, 5)"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Execute this cell.\n",
+    "print(type(df.values))  # The values of the DataFrame are actually held in a numpy array.\n",
+    "df.values.shape         # We have a 401 row x 5 column array."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Security</th>\n",
+       "      <th>Ticker symbol</th>\n",
+       "      <th>GICS Sector</th>\n",
+       "      <th>GICS Sub Industry</th>\n",
+       "      <th>SEC filings</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>46</th>\n",
+       "      <td>Casey's General Stores</td>\n",
+       "      <td>CASY</td>\n",
+       "      <td>Consumer Staples</td>\n",
+       "      <td>Food Retail</td>\n",
+       "      <td>reports</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>107</th>\n",
+       "      <td>Energizer Holdings Inc</td>\n",
+       "      <td>ENR</td>\n",
+       "      <td>Consumer Staples</td>\n",
+       "      <td>Household Products</td>\n",
+       "      <td>reports</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>109</th>\n",
+       "      <td>Edgewell Personal Care Company</td>\n",
+       "      <td>EPC</td>\n",
+       "      <td>Consumer Staples</td>\n",
+       "      <td>Household Products</td>\n",
+       "      <td>reports</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                           Security Ticker symbol       GICS Sector  \\\n",
+       "46           Casey's General Stores          CASY  Consumer Staples   \n",
+       "107          Energizer Holdings Inc           ENR  Consumer Staples   \n",
+       "109  Edgewell Personal Care Company           EPC  Consumer Staples   \n",
+       "\n",
+       "      GICS Sub Industry SEC filings  \n",
+       "46          Food Retail     reports  \n",
+       "107  Household Products     reports  \n",
+       "109  Household Products     reports  "
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# What is the difference between Consumer Staples and Consumer Discretionary?\n",
+    "# First execute this code that extracts the first 3 of the S&P 400 companies in the Consumer Staples sector.\n",
+    "df[df['GICS Sector']=='Consumer Staples'].head(3)\n",
+    "# Do you understand how this code works?  What does df['GICS Sector']=='Consumer Staples' do?\n",
+    "\n",
+    "# Answers:Let me answer the seconde question first. df['GICS Sector']=='Consumer Staples'  is a judgement condition.\n",
+    "#         Then, let me answer the first question. This code is to find all rows satisfy this condition.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Security</th>\n",
+       "      <th>Ticker symbol</th>\n",
+       "      <th>GICS Sector</th>\n",
+       "      <th>GICS Sub Industry</th>\n",
+       "      <th>SEC filings</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Aaron's Inc.</td>\n",
+       "      <td>AAN</td>\n",
+       "      <td>Consumer Discretionary</td>\n",
+       "      <td>Homefurnishing Retail</td>\n",
+       "      <td>reports</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Adient plc</td>\n",
+       "      <td>ADNT</td>\n",
+       "      <td>Consumer Discretionary</td>\n",
+       "      <td>Auto Parts &amp; Equipment</td>\n",
+       "      <td>reports</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>Adtalem Global Education</td>\n",
+       "      <td>ATGE</td>\n",
+       "      <td>Consumer Discretionary</td>\n",
+       "      <td>Education Services</td>\n",
+       "      <td>reports</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                   Security Ticker symbol             GICS Sector  \\\n",
+       "0              Aaron's Inc.           AAN  Consumer Discretionary   \n",
+       "3                Adient plc          ADNT  Consumer Discretionary   \n",
+       "4  Adtalem Global Education          ATGE  Consumer Discretionary   \n",
+       "\n",
+       "        GICS Sub Industry SEC filings  \n",
+       "0   Homefurnishing Retail     reports  \n",
+       "3  Auto Parts & Equipment     reports  \n",
+       "4      Education Services     reports  "
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# In this cell, repeat the above code for the Consumer Discretionary sector.\n",
+    "df[df['GICS Sector']=='Consumer Discretionary'].head(3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Please install the `pandas-datareader` package, using conda:  \n",
+    "`conda install pandas-datareader`  \n",
+    "or perhaps  \n",
+    "`conda install -c anaconda pandas-datareader`  \n",
+    "or using pip:  \n",
+    "`pip install pandas-datareader`  \n",
+    "\n",
+    "The `pandas_datareader` library allows us to access various online sources of stock prices.  \n",
+    "Yahoo used to be the most popular source for historical price data, but they recently cancelled this service.  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# In this cell, import the pandas_datareader library and alias to \"web\".\n",
+    "import pandas_datareader as web"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'0.7.0'"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Execute this cell.\n",
+    "web.__version__    # The .__version__ function queries the version of the library."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Execute this cell.\n",
+    "from datetime import datetime"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Use the datetime function to assign the date Jan 21, 2018 to a datetime object called \"startDate\".\n",
+    "startDate = datetime(2018, 1, 21)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Use the datetime function to assign the date Jan 28, 2018 to a datetime object called \"endDate\"\n",
+    "endDate = datetime(2018, 1, 28)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Pick your 3 favorite US companies and look up their symbols.\n",
+    "# Put these 3 symbols in a list called \"mySymbols\".\n",
+    "mySymbols = ['AAPL', 'GOOG', 'TSLA']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Use pandas-datareader function to query IEX for \"mySymbols\",\n",
+    "# starting from \"startDate\" and ending at \"endDate\".\n",
+    "# Assign the output to \"iexDataFrame\".\n",
+    "iexDataFrame = web.data.DataReader(mySymbols, 'iex',  startDate, endDate)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "(5, 15)\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead tr th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead tr:last-of-type th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr>\n",
+       "      <th>Attributes</th>\n",
+       "      <th colspan=\"3\" halign=\"left\">open</th>\n",
+       "      <th colspan=\"3\" halign=\"left\">high</th>\n",
+       "      <th colspan=\"3\" halign=\"left\">low</th>\n",
+       "      <th colspan=\"3\" halign=\"left\">close</th>\n",
+       "      <th colspan=\"3\" halign=\"left\">volume</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>Symbols</th>\n",
+       "      <th>AAPL</th>\n",
+       "      <th>GOOG</th>\n",
+       "      <th>TSLA</th>\n",
+       "      <th>AAPL</th>\n",
+       "      <th>GOOG</th>\n",
+       "      <th>TSLA</th>\n",
+       "      <th>AAPL</th>\n",
+       "      <th>GOOG</th>\n",
+       "      <th>TSLA</th>\n",
+       "      <th>AAPL</th>\n",
+       "      <th>GOOG</th>\n",
+       "      <th>TSLA</th>\n",
+       "      <th>AAPL</th>\n",
+       "      <th>GOOG</th>\n",
+       "      <th>TSLA</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>date</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>2018-01-22</th>\n",
+       "      <td>173.9314</td>\n",
+       "      <td>1137.49</td>\n",
+       "      <td>349.40</td>\n",
+       "      <td>174.4023</td>\n",
+       "      <td>1159.88</td>\n",
+       "      <td>357.83</td>\n",
+       "      <td>173.2463</td>\n",
+       "      <td>1135.11</td>\n",
+       "      <td>349.20</td>\n",
+       "      <td>173.6371</td>\n",
+       "      <td>1155.81</td>\n",
+       "      <td>351.56</td>\n",
+       "      <td>27108551</td>\n",
+       "      <td>1617975</td>\n",
+       "      <td>6210360</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2018-01-23</th>\n",
+       "      <td>173.9314</td>\n",
+       "      <td>1159.85</td>\n",
+       "      <td>360.00</td>\n",
+       "      <td>176.0308</td>\n",
+       "      <td>1171.63</td>\n",
+       "      <td>360.50</td>\n",
+       "      <td>173.4606</td>\n",
+       "      <td>1158.75</td>\n",
+       "      <td>351.00</td>\n",
+       "      <td>173.6764</td>\n",
+       "      <td>1169.97</td>\n",
+       "      <td>352.79</td>\n",
+       "      <td>32689146</td>\n",
+       "      <td>1333056</td>\n",
+       "      <td>5465414</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2018-01-24</th>\n",
+       "      <td>173.8824</td>\n",
+       "      <td>1177.33</td>\n",
+       "      <td>354.58</td>\n",
+       "      <td>173.9314</td>\n",
+       "      <td>1179.86</td>\n",
+       "      <td>354.75</td>\n",
+       "      <td>169.9093</td>\n",
+       "      <td>1161.05</td>\n",
+       "      <td>343.52</td>\n",
+       "      <td>170.9100</td>\n",
+       "      <td>1164.24</td>\n",
+       "      <td>345.89</td>\n",
+       "      <td>51105090</td>\n",
+       "      <td>1416625</td>\n",
+       "      <td>5287478</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2018-01-25</th>\n",
+       "      <td>171.1895</td>\n",
+       "      <td>1172.53</td>\n",
+       "      <td>348.27</td>\n",
+       "      <td>171.6261</td>\n",
+       "      <td>1175.94</td>\n",
+       "      <td>349.20</td>\n",
+       "      <td>167.2901</td>\n",
+       "      <td>1162.76</td>\n",
+       "      <td>336.40</td>\n",
+       "      <td>167.8590</td>\n",
+       "      <td>1170.37</td>\n",
+       "      <td>337.64</td>\n",
+       "      <td>41529004</td>\n",
+       "      <td>1480540</td>\n",
+       "      <td>6740303</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2018-01-26</th>\n",
+       "      <td>168.7321</td>\n",
+       "      <td>1175.08</td>\n",
+       "      <td>341.50</td>\n",
+       "      <td>168.7321</td>\n",
+       "      <td>1175.84</td>\n",
+       "      <td>344.00</td>\n",
+       "      <td>166.8290</td>\n",
+       "      <td>1158.11</td>\n",
+       "      <td>335.71</td>\n",
+       "      <td>168.2514</td>\n",
+       "      <td>1175.84</td>\n",
+       "      <td>342.85</td>\n",
+       "      <td>39143011</td>\n",
+       "      <td>2018755</td>\n",
+       "      <td>4539356</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "Attributes      open                       high                        low  \\\n",
+       "Symbols         AAPL     GOOG    TSLA      AAPL     GOOG    TSLA      AAPL   \n",
+       "date                                                                         \n",
+       "2018-01-22  173.9314  1137.49  349.40  174.4023  1159.88  357.83  173.2463   \n",
+       "2018-01-23  173.9314  1159.85  360.00  176.0308  1171.63  360.50  173.4606   \n",
+       "2018-01-24  173.8824  1177.33  354.58  173.9314  1179.86  354.75  169.9093   \n",
+       "2018-01-25  171.1895  1172.53  348.27  171.6261  1175.94  349.20  167.2901   \n",
+       "2018-01-26  168.7321  1175.08  341.50  168.7321  1175.84  344.00  166.8290   \n",
+       "\n",
+       "Attributes                      close                     volume           \\\n",
+       "Symbols        GOOG    TSLA      AAPL     GOOG    TSLA      AAPL     GOOG   \n",
+       "date                                                                        \n",
+       "2018-01-22  1135.11  349.20  173.6371  1155.81  351.56  27108551  1617975   \n",
+       "2018-01-23  1158.75  351.00  173.6764  1169.97  352.79  32689146  1333056   \n",
+       "2018-01-24  1161.05  343.52  170.9100  1164.24  345.89  51105090  1416625   \n",
+       "2018-01-25  1162.76  336.40  167.8590  1170.37  337.64  41529004  1480540   \n",
+       "2018-01-26  1158.11  335.71  168.2514  1175.84  342.85  39143011  2018755   \n",
+       "\n",
+       "Attributes           \n",
+       "Symbols        TSLA  \n",
+       "date                 \n",
+       "2018-01-22  6210360  \n",
+       "2018-01-23  5465414  \n",
+       "2018-01-24  5287478  \n",
+       "2018-01-25  6740303  \n",
+       "2018-01-26  4539356  "
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Execute this code.\n",
+    "print(type(iexDataFrame))\n",
+    "print(iexDataFrame.shape)\n",
+    "iexDataFrame"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Select the columns of close prices and assign it to \"priceTable\".\n",
+    "priceTable = iexDataFrame['close']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "(5, 3)\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th>Symbols</th>\n",
+       "      <th>AAPL</th>\n",
+       "      <th>GOOG</th>\n",
+       "      <th>TSLA</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>date</th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "      <th></th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>2018-01-22</th>\n",
+       "      <td>173.6371</td>\n",
+       "      <td>1155.81</td>\n",
+       "      <td>351.56</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2018-01-23</th>\n",
+       "      <td>173.6764</td>\n",
+       "      <td>1169.97</td>\n",
+       "      <td>352.79</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2018-01-24</th>\n",
+       "      <td>170.9100</td>\n",
+       "      <td>1164.24</td>\n",
+       "      <td>345.89</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2018-01-25</th>\n",
+       "      <td>167.8590</td>\n",
+       "      <td>1170.37</td>\n",
+       "      <td>337.64</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2018-01-26</th>\n",
+       "      <td>168.2514</td>\n",
+       "      <td>1175.84</td>\n",
+       "      <td>342.85</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "Symbols         AAPL     GOOG    TSLA\n",
+       "date                                 \n",
+       "2018-01-22  173.6371  1155.81  351.56\n",
+       "2018-01-23  173.6764  1169.97  352.79\n",
+       "2018-01-24  170.9100  1164.24  345.89\n",
+       "2018-01-25  167.8590  1170.37  337.64\n",
+       "2018-01-26  168.2514  1175.84  342.85"
+      ]
+     },
+     "execution_count": 22,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Execute this code.\n",
+    "print(type(priceTable))\n",
+    "print(priceTable.shape)\n",
+    "priceTable"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.1"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 1
+}
