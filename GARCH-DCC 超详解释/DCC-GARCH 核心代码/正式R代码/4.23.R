@@ -16,9 +16,24 @@ library(readxl)
 #library("ggplot2")
 #install.packages("dplyr")
 #library("dplyr")
+
+#需要安装的包列表
+pkgs.vec<-c("PerformanceAnalytics","quantmod","rugarch","rmgarch","xts",'zoo')
+
+#安装包
+install.packages(pkgs.vec)
+
+#加载包
+library("PerformanceAnalytics")
+library("quantmod")
+library("rugarch")
+library("rmgarch")
+library(zoo)
+library(xts)
+
 symbol.vec = c("COMM", "SP500")
 
-setwd("/Users/flu16/Desktop/洗数据/未命名文件夹")
+setwd(getwd())
 
 
 #,row.names = 1
@@ -26,17 +41,6 @@ COMM<- read.csv(file="bcom.csv", header=TRUE, sep=",",row.names = 1)
 SP500<- read.csv(file="spx.csv", header=TRUE, sep=",",row.names = 1)
 SP500 = as.xts(SP500)
 COMM = as.xts(COMM)
-
-
-
-
-head(COMM)
-class(COMM)
-typeof(COMM)
-print(COMM)
-plot(COMM)
-dim(COMM)
-
 
 
 
